@@ -30,14 +30,6 @@ uint8_t count_digits(uint32_t num)
 	return num_size;
 }
 
-void paste_spaces(const uint8_t amount)
-{
-	for (int i = 0; i < amount; i++)
-	{
-		printf(" ");
-	}
-}
-
 void print_cover(void)
 {
 	printf("+");
@@ -64,15 +56,7 @@ void print_header(void)
 	{
 		const uint8_t num_spaces = num_width - 1;
 		const uint8_t fact_spaces = fact_width - 2;
-		printf("| ");
-		paste_spaces(num_spaces / 2 + num_spaces % 2);
-		printf("%c", 'n');
-		paste_spaces(num_spaces / 2);
-		printf(" | ");
-		paste_spaces(fact_spaces / 2 + fact_spaces % 2);
-		printf("%s", "n!");
-		paste_spaces(fact_spaces / 2);
-		printf(" |\n");
+		printf("| %*s%c%*s | %*s%s%*s |\n", num_spaces / 2 + num_spaces % 2, "", 'n', num_spaces / 2, "", fact_spaces / 2 + fact_spaces % 2, "", "n!", fact_spaces / 2, "");
 	}
 	print_cover();
 }
@@ -91,15 +75,7 @@ void print_data(const uint16_t start, const uint16_t end)
 		{
 			const uint8_t num_spaces = num_width - count_digits(num);
 			const uint8_t fact_spaces = fact_width - count_digits(fact);
-			printf("| ");
-			paste_spaces(num_spaces / 2 + num_spaces % 2);
-			printf("%d", num);
-			paste_spaces(num_spaces / 2);
-			printf(" | ");
-			paste_spaces(fact_spaces / 2 + fact_spaces % 2);
-			printf("%ld", fact);
-			paste_spaces(fact_spaces / 2);
-			printf(" |\n");
+			printf("| %*s%d%*s | %*s%ld%*s |\n", num_spaces / 2 + num_spaces % 2, "", num, num_spaces / 2, "", fact_spaces / 2 + fact_spaces % 2, "", fact, fact_spaces / 2, "");
 		}
 	}
 }
