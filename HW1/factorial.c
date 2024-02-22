@@ -19,7 +19,7 @@ uint32_t get_factorial(const uint32_t num)
 	return factorial;
 }
 
-uint64_t count_digits(uint32_t num)
+uint8_t count_digits(uint32_t num)
 {
 	uint8_t num_size = 0;
 	do
