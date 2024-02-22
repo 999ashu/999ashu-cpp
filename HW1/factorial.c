@@ -13,9 +13,7 @@ uint32_t get_factorial(const uint32_t num)
 {
 	uint64_t factorial = 1;
 	for (uint64_t i = 2; i <= num; i++)
-	{
 		factorial = factorial * i % M_31;
-	}
 	return factorial;
 }
 
@@ -34,14 +32,10 @@ void print_cover(void)
 {
 	printf("+");
 	for (uint8_t i = 0; i < num_width + 2; i++)
-	{
 		printf("-");
-	}
 	printf("+");
 	for (uint8_t i = 0; i < fact_width + 2; i++)
-	{
 		printf("-");
-	}
 	printf("+\n");
 }
 
@@ -49,9 +43,7 @@ void print_header(void)
 {
 	print_cover();
 	if (align)
-	{
 		printf("| %*c | %*s |\n", align * num_width, 'n', align * fact_width, "n!");
-	}
 	else
 	{
 		const uint8_t num_spaces = num_width - 1;
@@ -68,9 +60,7 @@ void print_data(const uint16_t start, const uint16_t end)
 	{
 		fact = fact * (num == 0 ? 1 : num) % M_31;
 		if (align)
-		{
 			printf("| %*d | %*ld |\n", align * num_width, num, align * fact_width, fact);
-		}
 		else
 		{
 			const uint8_t num_spaces = num_width - count_digits(num);
@@ -106,8 +96,6 @@ int main(void)
 		return 0;
 	}
 	if (n_start < 0 || n_end < 0)
-	{
 		fprintf(stderr, "Impossible to get the factorial of a negative number.\n");
-	}
 	return 1;
 }
