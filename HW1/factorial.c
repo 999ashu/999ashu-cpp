@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -7,9 +8,7 @@
 #define DIV2(x) (x >> 1)
 #define MOD2(x) (x & 1)
 
-uint8_t num_width, fact_width;
-
-uint8_t number_len(uint32_t num)
+uint8_t number_len(int32_t num)
 {
 	uint8_t num_size = 0;
 	do
@@ -24,7 +23,7 @@ uint8_t biggest_factorial_len(const uint16_t num)
 {
 	uint8_t counter = 1;
 	uint64_t factorial = 1;
-	for (uint64_t i = 2; i <= num; i++)
+	for (uint32_t i = 2; i <= num; i++)
 	{
 		factorial = factorial * i % M_31;
 		const uint8_t len = number_len(factorial);
@@ -37,7 +36,7 @@ uint8_t biggest_factorial_len(const uint16_t num)
 	return counter;
 }
 
-void print_cover()
+void print_cover(const uint8_t num_width, const uint8_t fact_width)
 {
 	printf("+");
 	for (uint8_t i = 0; i < num_width + 2; i++)
@@ -52,9 +51,9 @@ void print_cover()
 	printf("+\n");
 }
 
-void print_header(const int8_t align)
+void print_header(const uint8_t num_width, const uint8_t fact_width, const int8_t align)
 {
-	print_cover();
+	print_cover(num_width, fact_width);
 	if (align)
 	{
 		printf("| %*c | %*s |\n", align * num_width, 'n', align * fact_width, "n!");
@@ -76,10 +75,10 @@ void print_header(const int8_t align)
 			DIV2(fact_spaces),
 			"");
 	}
-	print_cover();
+	print_cover(num_width, fact_width);
 }
 
-void print_data(const uint16_t start, const uint16_t end, const int8_t align)
+void print_data(const uint16_t start, const uint16_t end, const uint8_t num_width, const uint8_t fact_width, const int8_t align)
 {
 	uint64_t fact = 1;
 	if (start > 0)
@@ -94,14 +93,14 @@ void print_data(const uint16_t start, const uint16_t end, const int8_t align)
 		fact = fact * (num == 0 ? 1 : num) % M_31;
 		if (align)
 		{
-			printf("| %*d | %*lld |\n", align * num_width, num, align * fact_width, fact);
+			printf("| %*" PRIu16 " | %*" PRIu64 " |\n", align * num_width, num, align * fact_width, fact);
 		}
 		else
 		{
 			const uint8_t num_spaces = num_width - number_len(num);
 			const uint8_t fact_spaces = fact_width - number_len(fact);
 			printf(
-				"| %*s%d%*s | %*s%lld%*s |\n",
+				"| %*s%" PRIu16 "%*s | %*s%" PRIu64 "%*s |\n",
 				DIV2(num_spaces) + MOD2(num_spaces),
 				"",
 				num,
@@ -120,26 +119,30 @@ int main(void)
 {
 	int32_t n_start, n_end;
 	int8_t align;
-	scanf("%d %d %hhd", &n_start, &n_end, &align);
+	if (scanf("%d %d %hhd", &n_start, &n_end, &align) < 3)
+	{
+		return 1;
+	}
 	if (n_start >= 0 && n_end >= 0 && -1 <= align && align <= 1)
 	{
+		uint8_t num_width, fact_width;
 		if (n_start <= n_end)
 		{
 			num_width = number_len(n_end);
 			const uint8_t temp = biggest_factorial_len(n_end);
 			fact_width = temp != 1 ? temp : 2;
-			print_header(align);
-			print_data(n_start, n_end, align);
+			print_header(num_width, fact_width, align);
+			print_data(n_start, n_end, num_width, fact_width, align);
 		}
 		else
 		{
 			num_width = number_len(MODULE);
 			fact_width = biggest_factorial_len(MODULE);
-			print_header(align);
-			print_data(n_start, MODULE, align);
-			print_data(0, n_end, align);
+			print_header(num_width, fact_width, align);
+			print_data(n_start, MODULE, num_width, fact_width, align);
+			print_data(0, n_end, num_width, fact_width, align);
 		}
-		print_cover();
+		print_cover(num_width, fact_width);
 		return 0;
 	}
 	if (n_start < 0 || n_end < 0)
